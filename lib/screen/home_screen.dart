@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player_example/component/custom_video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,29 +15,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: video == null ? renderEmpty() : renderVideo(),
+      body: Center(
+        child: video == null ? renderEmpty() : renderVideo(),
+      ),
     );
   }
 
   Widget renderVideo() {
-    return Center(
-      child: Text('Video'),
+    return CustomVideoPlayer(
+      video: video!,
+      onNewVideoPressed: onNewVideoPressed,
     );
   }
 
-
   Widget renderEmpty() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       decoration: getBoxDecoration(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _Logo(
-            onTap: onLogoTap,
+            onTap: onNewVideoPressed,
           ),
           SizedBox(
             height: 30,
@@ -49,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   BoxDecoration getBoxDecoration() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -61,16 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void onLogoTap() async {
+  void onNewVideoPressed() async {
     final ImagePicker _picker = ImagePicker();
     final video = await _picker.pickVideo(
-        source: ImageSource.gallery,
+      source: ImageSource.gallery,
     );
 
     if (video != null) {
-       setState(() {
-         this.video = video;
-       });
+      setState(() {
+        this.video = video;
+      });
     }
   }
 }
